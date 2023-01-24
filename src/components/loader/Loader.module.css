@@ -1,0 +1,29 @@
+@keyframes defaultKeyframes {
+    100% { width: 0; height: 0; }
+}
+
+@keyframes transformKeyframes {
+    100% { transform: scale(0); }
+}
+
+.loaderWrapper {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ff9037;
+    animation: defaultKeyframes 500ms linear infinite alternate;
+}
+
+.loaderTransform {
+    background-color: #0dab15;
+    animation-name: transformKeyframes;
+}
