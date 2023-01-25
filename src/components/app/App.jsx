@@ -5,6 +5,9 @@ import {Button} from "../button/button";
 import {getRandomColor} from "../../utils";
 import {ThemeSwitcher} from "../style/ThemeSwitcher";
 import {StyleProvider} from "../style/StyleProvider";
+import {useDispatch, useSelector} from "react-redux";
+import {add} from "../../redux/logSlice";
+import {toggleLoader, closeLoader} from "../../redux/loaderSlice";
 
 const Pixel = ({color = "#000", size = 1}) => {
 	const ref = useRef(null);
@@ -31,10 +34,25 @@ const Pixel = ({color = "#000", size = 1}) => {
 
 const pixelSize = 5;
 
+const Select = ({items}) => (
+	<select className={styles.log} multiple={true} size="5" >
+		{
+			items.map(({id, size, color}) => (
+				<option key={id}>size: {size}, color: {color}</option>
+			))
+		}
+	</select>
+);
+
 function App() {
-	const [color, setColor] = useState("#FF0000");
-	const [size, setSize] = useState(30);
-	const [isLoaderVisible, setLoaderVisible] = useState(false);
+	const [color, setColor] = useState("#F00");
+	const [size, setSize] = useState(20);
+
+	const loader = useSelector(state => state.loader);
+	const logBigItems = useSelector(
+		state => state.logItems.filter(item => item.size >= 100),
+	);
+	const dispatch = useDispatch();
 
 	return (
 		<StyleProvider>
@@ -45,20 +63,35 @@ function App() {
 						min={50}
 						max={700}
 						step={10}
-						onChange={e => setSize(+e.target.value)}
+						onChange={e => {
+							const size = +e.target.value;
+							setSize(size);
+							dispatch(add({ size, color }));
+						}}
 					/>
 					Size: {size}
+					<Select items={logBigItems} />
 					<Button
 						text="Change color"
 						onClick={() => {
-							setColor(getRandomColor());
+							const color = getRandomColor();
+							setColor(color);
+							dispatch(add({ size, color }));
 						}}
 					/>
 					<Button
-						text={`${isLoaderVisible ? "Hide" : "Show"} spinners`}
-						onClick={() => setLoaderVisible(!isLoaderVisible)}
+						text={`${loader.isVisible ? "Hide" : "Show"} loaders`}
+						onClick={() => {
+							dispatch(toggleLoader());
+						}}
 					/>
-					{isLoaderVisible && (
+					<Button
+						text="Close loaders"
+						onClick={() => {
+							dispatch(closeLoader());
+						}}
+					/>
+					{loader.isVisible && (
 						<>
 							<span style={{ marginTop: 15 }}>width, height</span><Loader />
 							<span>transform: scale</span><Loader transform={true}/>

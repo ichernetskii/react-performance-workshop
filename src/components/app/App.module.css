@@ -40,3 +40,8 @@
     margin: 0 1px 1px 0;
     box-sizing: border-box;
 }
+
+.log {
+    margin: 10px 0;
+    width: 70%;
+}

@@ -1,6 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
-import notesReducer from './notesSlice'
+import { configureStore } from '@reduxjs/toolkit';
+import logReducer from './logSlice';
+import loaderReducer from './loaderSlice'
+
 
 export const store = configureStore({
-    reducer: notesReducer,
+    reducer: {
+        logItems: logReducer,
+        loader: loaderReducer,
+    },
 })
