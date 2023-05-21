@@ -1,5 +1,4 @@
 import {createSlice, nanoid} from '@reduxjs/toolkit'
-import produce from "immer";
 
 const initialState = [];
 
@@ -8,13 +7,14 @@ export const logSlice = createSlice({
     initialState,
     reducers: {
         add: (state, {payload}) => {
-            return produce(state, draft => {
-                draft.push({
+            return [
+                ...state,
+                {
                     id: nanoid(),
                     size: payload.size,
                     color: payload.color,
-                });
-            });
+                }
+            ];
         },
     },
 })

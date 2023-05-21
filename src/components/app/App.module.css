@@ -5,15 +5,28 @@
     box-sizing: border-box;
     padding: 50px 0;
     display: flex;
+    font-family: sans-serif;
 }
 
 .controls {
     display: flex;
     flex-direction: column;
-    padding-top: 100px;
     align-items: center;
     width: 20%;
     border-right: 1px solid #888;
+}
+
+.controlsTitleWrapper {
+    margin-bottom: 20px;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.controlsTitle {
+    margin-right: 20px;
+    font-size: 1.7em;
 }
 
 .controls >:last-child {

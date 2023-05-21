@@ -1,9 +1,4 @@
 # React performance [presentation](React_performance.key) DEMO
+Cases to fix: [cases.md](cases.md)
 
-## Available Scripts
-
-### `npm start`
-
-### `npm test`
-
-### `npm run build`
+Run `npm start` to start application

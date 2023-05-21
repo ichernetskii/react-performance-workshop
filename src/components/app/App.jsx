@@ -1,5 +1,5 @@
 import styles from "./App.module.css";
-import {useLayoutEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Loader} from "../loader/Loader";
 import {Button} from "../button/button";
 import {getRandomColor} from "../../utils";
@@ -9,18 +9,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {add} from "../../redux/logSlice";
 import {toggleLoader, closeLoader} from "../../redux/loaderSlice";
 
-const Pixel = ({color = "#000", size = 1}) => {
+const Pixel = ({color, size}) => {
 	const ref = useRef(null);
 	const contentSize = size - 1;
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (ref.current) {
+			if (ref.current.clientWidth > 10) {
+				ref.current.style.borderRadius = "10%";
+			}
+
 			ref.current.style.backgroundColor = color;
 			ref.current.style.width = `${contentSize}px`;
 			ref.current.style.height = `${contentSize}px`;
-
-			if (ref.current.clientWidth > 10) {
-				ref.current.style.borderRadius = "50%";
-			}
 		}
 	}, [color, contentSize]);
 
@@ -44,20 +44,29 @@ const Select = ({items}) => (
 	</select>
 );
 
+const MIN_SIZE = 200;
+
 function App() {
 	const [color, setColor] = useState("#F00");
 	const [size, setSize] = useState(20);
 
+	const logBigItems = useSelector(state => state.logItems.filter(item => item.size >= MIN_SIZE));
 	const loader = useSelector(state => state.loader);
-	const logBigItems = useSelector(
-		state => state.logItems.filter(item => item.size >= 100),
-	);
 	const dispatch = useDispatch();
+
+	const [boldTitle, setBoldTitle] = useState(false);
 
 	return (
 		<StyleProvider>
 			<div className={styles.app}>
 				<div className={styles.controls}>
+					<div className={styles.controlsTitleWrapper}>
+						<span className={styles.controlsTitle} style={{fontWeight: boldTitle ? 900 : 400}}>Settings</span>
+						<div>
+							<input type="checkbox" id="title-bold" onClick={e => setBoldTitle(e.target.checked)} />
+							<label htmlFor="title-bold">Bold title</label>
+						</div>
+					</div>
 					<input
 						type="range"
 						min={50}
@@ -69,7 +78,9 @@ function App() {
 							dispatch(add({ size, color }));
 						}}
 					/>
-					Size: {size}
+					<div>Size: {size}</div>
+					<br />
+					<div>Log for sizes > {MIN_SIZE}:</div>
 					<Select items={logBigItems} />
 					<Button
 						text="Change color"
