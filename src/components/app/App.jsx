@@ -47,7 +47,7 @@ const Select = ({items}) => (
 const MIN_SIZE = 200;
 
 function App() {
-	const [color, setColor] = useState("#F00");
+	const [color, setColor] = useState("red");
 	const [size, setSize] = useState(20);
 
 	const logBigItems = useSelector(state => state.logItems.filter(item => item.size >= MIN_SIZE));
